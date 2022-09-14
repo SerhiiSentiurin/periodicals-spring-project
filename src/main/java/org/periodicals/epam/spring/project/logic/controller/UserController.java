@@ -1,5 +1,6 @@
 package org.periodicals.epam.spring.project.logic.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.periodicals.epam.spring.project.infra.web.QueryParameterHandler;
 import org.periodicals.epam.spring.project.infra.web.ViewMapConfig;
 import org.periodicals.epam.spring.project.logic.entity.User;
@@ -17,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Controller
+
 public class UserController {
 
 

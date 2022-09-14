@@ -8,23 +8,24 @@
     </head>
     <body>
 
-        <form action = "/app/periodicals/periodical/watchByTopic" method = "GET">
+        <form action = "/app/periodicals/periodical/search" method = "GET">
             <label for="topic"><lang:print message = "periodical.periodicalForSubscribing.jsp.label.find_periodical_by_topic"/>:</label>
             <select name="topic">
+                <option value=""><no topic/></option>
                 <option value="business"><lang:print message = "periodical.periodicalForSubscribing.jsp.option.business"/></option>
-                <option value="sport" selected><lang:print message = "periodical.periodicalForSubscribing.jsp.option.sport"/></option>
+                <option value="sport" ><lang:print message = "periodical.periodicalForSubscribing.jsp.option.sport"/></option>
                 <option value="technology"><lang:print message = "periodical.periodicalForSubscribing.jsp.option.technology"/></option>
             </select>
+
+            <label for="name"><lang:print message = "periodical.periodicalForSubscribing.jsp.label.find_periodical_by_name"/>:</label>
+            <input type="text" name="name"  />
+
+
             <input type = "hidden" name="page" value = "${page}"/>
             <button type ="submit"><lang:print message = "periodical.periodicalForSubscribing.jsp.button.search"/></button>
         </form>
 
-        <form action = "/app/periodicals/periodical/findByName" method ="GET">
-            <label for="name"><lang:print message = "periodical.periodicalForSubscribing.jsp.label.find_periodical_by_name"/>:</label>
-            <input type="text" name="name" required >
-            <input type = "hidden" name="page" value = "${page}"/>
-            <input type="submit" value='<lang:print message = "periodical.periodicalForSubscribing.jsp.button.search"/>'>
-        </form><br>
+
 
         <form action = "/app/periodicals/periodical/sortByCost" method = "GET">
             <label for="name"><lang:print message = "periodical.watchPeriodical.jsp.label.sort_periodicals_by_cost"/>:</label><br>
@@ -74,17 +75,26 @@
         <table align = "center">
             <th><lang:print message = "periodical.watchPeriodical.jsp.pages"/></th>
             <td align = "center">
-                <c:if test = "${countOfHref != 0}">
-                    <c:forEach var = "i" begin = "1" end = "${countOfHref}">
+                <c:if test = "${countOfPages != 0}">
+                    <c:forEach var = "i" begin = "1" end = "${countOfPages}">
                         <c:if test = "${i != page}">
-                            <c:if test = "${topic == null && name == null}">
+                            <c:if test = "${path == '/app/periodicals/periodical/watch'}">
                                 <a href="/app/periodicals/periodical/watch?page=${i}">  < ${i} >  </a>
                             </c:if>
-                            <c:if test = "${topic != null}">
-                                <a href="/app/periodicals/periodical/watchByTopic?topic=${topic}&page=${i}">  < ${i} >  </a>
+                            <c:if test = "${path == '/app/periodicals/periodical/search'}">
+                                <a href="/app/periodicals/periodical/search?topic=${topic}&name=${name}&page=${i}">  < ${i} >  </a>
                             </c:if>
-                            <c:if test = "${name != null}">
-                                <a href="/app/periodicals/periodical/findByName?name=${name}&page=${i}">  < ${i} >  </a>
+                            <c:if test = "${path == '/app/periodicals/periodical/sortByCost'}">
+                                <a href="/app/periodicals/periodical/sortByCost?topic=${topic}&name=${name}&page=${i}">  < ${i} >  </a>
+                            </c:if>
+                            <c:if test = "${path == '/app/periodicals/periodical/reversedSortByCost'}">
+                                <a href="/app/periodicals/periodical/reversedSortByCost?topic=${topic}&name=${name}&page=${i}">  < ${i} >  </a>
+                            </c:if>
+                            <c:if test = "${path == '/app/periodicals/periodical/sortByName'}">
+                                <a href="/app/periodicals/periodical/sortByName?topic=${topic}&name=${name}&page=${i}">  < ${i} >  </a>
+                            </c:if>
+                            <c:if test = "${path == '/app/periodicals/periodical/reversedSortByName'}">
+                                <a href="/app/periodicals/periodical/reversedSortByName?topic=${topic}&name=${name}&page=${i}">  < ${i} >  </a>
                             </c:if>
                         </c:if>
                         <c:if test = "${i == page}">
