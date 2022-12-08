@@ -5,14 +5,13 @@ import org.periodicals.epam.spring.project.logic.dao.resultSetExtractor.UserResu
 import org.periodicals.epam.spring.project.logic.entity.User;
 import org.periodicals.epam.spring.project.logic.entity.dto.UserDto;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class UserDAO {
-
     private final JdbcTemplate jdbcTemplate;
     private final UserResultSetExtractor userResultSetExtractor;
 

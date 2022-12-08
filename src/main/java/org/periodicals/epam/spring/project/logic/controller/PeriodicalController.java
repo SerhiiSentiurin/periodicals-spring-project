@@ -1,27 +1,27 @@
 package org.periodicals.epam.spring.project.logic.controller;
 
-import org.periodicals.epam.spring.project.infra.web.QueryParameterHandler;
+import lombok.AllArgsConstructor;
+import org.periodicals.epam.spring.project.logic.entity.Periodical;
+import org.periodicals.epam.spring.project.logic.entity.Prepayment;
+import org.periodicals.epam.spring.project.logic.entity.Reader;
 import org.periodicals.epam.spring.project.logic.service.PeriodicalService;
+import org.periodicals.epam.spring.project.logic.service.ReaderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/periodical")
+@AllArgsConstructor
 public class PeriodicalController {
-
     private final PeriodicalService periodicalService;
-    private final QueryParameterHandler queryParameterHandler;
-
-    public PeriodicalController(PeriodicalService periodicalService, QueryParameterHandler queryParameterHandler) {
-        this.periodicalService = periodicalService;
-        this.queryParameterHandler = queryParameterHandler;
-    }
-
-//сделать проверку есть ли в сессии юзер, если нет то использовать этот метод, если есть то if(!userFromSession.isEmpty){new ModelAndView(watchSubscriptions.jsp (или) periodicalsForSubscribing.jsp)}
+    private final ReaderService readerService;
 
     @GetMapping("/watch")
     public ModelAndView getAllPeriodicals(HttpServletRequest request) {
@@ -169,7 +169,88 @@ public class PeriodicalController {
         String servletPath = request.getServletPath();
         String pathInfo = request.getPathInfo();
         return contextPath.concat(servletPath).concat(pathInfo);
-
     }
 
+    @GetMapping("/readerSubscriptions")
+    public ModelAndView getPeriodicalsByReaderId(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        long readerId = Long.parseLong(request.getParameter("readerId"));
+        List<Periodical> subscribedPeriodicals = periodicalService.getPeriodicalsByReaderId(readerId);
+        List<Prepayment> prepaymentInfo = periodicalService.getPrepaymentsByReaderId(readerId);
+        modelAndView.addObject("periodicals", subscribedPeriodicals);
+        modelAndView.addObject("prepayments", prepaymentInfo);
+        modelAndView.setViewName("/periodical/watchSubscriptions.jsp");
+        return modelAndView;
+    }
+
+    @GetMapping("/getByTopicReaderSubscriptions")
+    public ModelAndView getPeriodicalsByTopicByReaderId(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        long readerId = Long.parseLong(request.getParameter("readerId"));
+        String topic = request.getParameter("topic");
+        Map<Periodical, Prepayment> infoMap = periodicalService.getPeriodicalsByTopicByReaderId(topic, readerId);
+        List<Periodical> subscribedPeriodicals = new ArrayList<>(infoMap.keySet());
+        List<Prepayment> prepaymentInfo = new ArrayList<>(infoMap.values());
+        modelAndView.addObject("periodicals", subscribedPeriodicals);
+        modelAndView.addObject("prepayments", prepaymentInfo);
+        modelAndView.addObject("topic", topic);
+        modelAndView.setViewName("/periodical/watchSubscriptions.jsp");
+        return modelAndView;
+    }
+
+    @GetMapping("/findByNameReaderSubscriptions")
+    public ModelAndView findPeriodicalsByNameByReaderId(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        long readerId = Long.parseLong(request.getParameter("readerId"));
+        String name = request.getParameter("name");
+        Map<Periodical, Prepayment> infoList = periodicalService.findPeriodicalsByNameByReaderId(name, readerId);
+        List<Periodical> subscribedPeriodicals = new ArrayList<>(infoList.keySet());
+        List<Prepayment> prepaymentInfo = new ArrayList<>(infoList.values());
+
+        modelAndView.addObject("periodicals", subscribedPeriodicals);
+        modelAndView.addObject("prepayments", prepaymentInfo);
+        modelAndView.addObject("name", name);
+        modelAndView.setViewName("/periodical/watchSubscriptions.jsp");
+        return modelAndView;
+    }
+
+    @GetMapping("/periodicalsForSubscribing")
+    public ModelAndView getPeriodicalsForSubscribing(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        long readerId = Long.parseLong(request.getParameter("readerId"));
+        List<Periodical> periodicalsForSubscribing = periodicalService.getPeriodicalsForSubscribing(readerId);
+        Reader reader = readerService.getReaderById(readerId);
+        modelAndView.addObject("reader", reader);
+        modelAndView.addObject("periodicals", periodicalsForSubscribing);
+        modelAndView.setViewName("/periodical/periodicalsForSubscribing.jsp");
+        return modelAndView;
+    }
+
+    @GetMapping("/getByTopicPeriodicalsForSubscribing")
+    public ModelAndView getPeriodicalsForSubscribingByTopicByReaderId(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        long readerId = Long.parseLong(request.getParameter("readerId"));
+        String topic = request.getParameter("topic");
+        List<Periodical> periodicalsForSubscribing = periodicalService.getPeriodicalsForSubscribingByTopicByReaderId(topic, readerId);
+        Reader reader = readerService.getReaderById(readerId);
+        modelAndView.addObject("reader", reader);
+        modelAndView.addObject("periodicals", periodicalsForSubscribing);
+        modelAndView.addObject("topic", topic);
+        modelAndView.setViewName("/periodical/periodicalsForSubscribing.jsp");
+        return modelAndView;
+    }
+
+    @GetMapping("/findByNamePeriodicalsForSubscribing")
+    public ModelAndView findPeriodicalsForSubscribingByNameByReaderId(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+        long readerId = Long.parseLong(request.getParameter("readerId"));
+        String name = request.getParameter("name");
+        List<Periodical> periodicalsForSubscribing = periodicalService.findPeriodicalsForSubscribingByNameByReaderId(name, readerId);
+        Reader reader = readerService.getReaderById(readerId);
+        modelAndView.addObject("reader", reader);
+        modelAndView.addObject("periodicals", periodicalsForSubscribing);
+        modelAndView.addObject("name", name);
+        modelAndView.setViewName("/periodical/periodicalsForSubscribing.jsp");
+        return modelAndView;
+    }
 }

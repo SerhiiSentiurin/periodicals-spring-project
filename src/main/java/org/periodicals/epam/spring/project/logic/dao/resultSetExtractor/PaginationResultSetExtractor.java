@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.OptionalDouble;
 
 @Component
 public class PaginationResultSetExtractor implements ResultSetExtractor<Optional<Double>> {

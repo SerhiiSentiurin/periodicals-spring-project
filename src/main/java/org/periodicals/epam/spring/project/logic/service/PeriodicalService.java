@@ -3,9 +3,12 @@ package org.periodicals.epam.spring.project.logic.service;
 import lombok.RequiredArgsConstructor;
 import org.periodicals.epam.spring.project.logic.dao.PeriodicalDAO;
 import org.periodicals.epam.spring.project.logic.entity.Periodical;
+import org.periodicals.epam.spring.project.logic.entity.Prepayment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -116,10 +119,43 @@ public class PeriodicalService {
         return periodicalDAO.reversedSortByNameWithSelectedTopicAndName(topic, name,getIndex(page));
     }
 
+    public List<Periodical> getPeriodicalsByReaderId(Long readerId){
+        return periodicalDAO.getPeriodicalsByReaderId(readerId);
+    }
+
+
+    public Map<Periodical, Prepayment> getPeriodicalsByTopicByReaderId(String topic, Long readerId) {
+        return periodicalDAO.getPeriodicalsByTopicByReaderId(topic, readerId);
+    }
+
+    public Map<Periodical, Prepayment> findPeriodicalsByNameByReaderId(String name, Long readerId) {
+        return periodicalDAO.findPeriodicalsByNameByReaderId(name, readerId);
+    }
+
+    public List<Prepayment> getPrepaymentsByReaderId(Long readerId) {
+        return periodicalDAO.getPrepaymentsByReaderId(readerId);
+    }
+
+    public List<Periodical> getPeriodicalsForSubscribing(Long readerId) {
+        List<Long> periodicalIdByReaderId = periodicalDAO.getPeriodicalIdByReaderId(readerId);
+        return periodicalDAO.getPeriodicalsForSubscribing(periodicalIdByReaderId);
+    }
+
+    public List<Periodical> getPeriodicalsForSubscribingByTopicByReaderId(String topic, Long readerId) {
+        List<Long> periodicalIdByReaderId = periodicalDAO.getPeriodicalIdByReaderId(readerId);
+        return periodicalDAO.getPeriodicalsForSubscribing(periodicalIdByReaderId)
+                .stream()
+                .filter(periodical -> periodical.getTopic().equals(topic))
+                .collect(Collectors.toList());
+    }
+
+    public List<Periodical> findPeriodicalsForSubscribingByNameByReaderId(String name, Long readerId) {
+        List<Long> periodicalIdByReaderId = periodicalDAO.getPeriodicalIdByReaderId(readerId);
+        return periodicalDAO.findPeriodicalsForSubscribingByName(periodicalIdByReaderId, name);
+    }
 
     private static int getIndex(int page){
         return (page - 1) * PERIODICALS_PER_PAGE;
     }
-
 
 }

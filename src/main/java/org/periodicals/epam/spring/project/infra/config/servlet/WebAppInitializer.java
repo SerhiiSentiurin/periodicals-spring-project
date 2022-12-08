@@ -32,8 +32,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         FilterRegistration.Dynamic security = servletContext.addFilter("security", new SecurityFilter());
         security.addMappingForUrlPatterns(null, false, "/*");
-//        FilterRegistration.Dynamic encoding = servletContext.addFilter("encoding", new EncodingFilter());
-//        encoding.addMappingForUrlPatterns(null, false, "/*");
 
 //        AnnotationConfigWebApplicationContext dispatcherContext =
 //                new AnnotationConfigWebApplicationContext();

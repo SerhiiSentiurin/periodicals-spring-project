@@ -6,15 +6,13 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class PeriodicalRowMapper implements RowMapper<Periodical> {
     @Override
     public Periodical mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Periodical periodical = new Periodical();
-        periodical.setId(resultSet.getLong("id"));
+        periodical.setId(resultSet.getLong("periodical.id"));
         periodical.setName(resultSet.getString("name"));
         periodical.setTopic(resultSet.getString("topic"));
         periodical.setCost(resultSet.getDouble("cost"));

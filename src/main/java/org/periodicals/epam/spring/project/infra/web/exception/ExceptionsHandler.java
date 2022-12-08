@@ -18,7 +18,7 @@ public class ExceptionsHandler {
         modelAndView.addObject("message", ex.getMessage());
         modelAndView.setViewName("/error/error.jsp");
 
-        log.error("exception was occur by request: " + request.getRequestURL() + "by reason: " + ex);
+        log.error("exception was occur by request: " + request.getRequestURL() + " by reason: " + ex);
         return modelAndView;
     }
 
@@ -28,7 +28,7 @@ public class ExceptionsHandler {
         modelAndView.addObject("message", ex.getMessage());
         modelAndView.setViewName("/error/internalError.jsp");
 
-        log.error("exception was occur by request: " + request.getRequestURL() + "by reason: " + ex);
+        log.error("exception was occur by request: " + request.getRequestURL() + " by reason: " + ex);
         return modelAndView;
     }
 }

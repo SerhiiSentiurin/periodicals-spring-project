@@ -12,8 +12,6 @@
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
     <mysql.version>8.0.29</mysql.version>
     <hikariCP.version>5.0.1</hikariCP.version>
     <lombok.version>1.18.24</lombok.version>

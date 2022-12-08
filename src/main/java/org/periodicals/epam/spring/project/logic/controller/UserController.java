@@ -1,30 +1,22 @@
 package org.periodicals.epam.spring.project.logic.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.periodicals.epam.spring.project.infra.web.QueryParameterHandler;
 import org.periodicals.epam.spring.project.infra.web.ViewMapConfig;
 import org.periodicals.epam.spring.project.logic.entity.User;
-import org.periodicals.epam.spring.project.logic.entity.UserRole;
 import org.periodicals.epam.spring.project.logic.entity.dto.UserDto;
 import org.periodicals.epam.spring.project.logic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
-import java.util.Map;
 
 @Controller
-
 public class UserController {
-
-
     private final UserService userService;
     private final QueryParameterHandler queryParameterHandler;
-//    private final Map<UserRole, String> mapView;
     private final ViewMapConfig mapView;
 
     public UserController(UserService userService, QueryParameterHandler queryParameterHandler, ViewMapConfig mapView) {
@@ -60,5 +52,4 @@ public class UserController {
         session.setAttribute("selectedLocale", locale);
         return new RedirectView("/app" + view);
     }
-
 }
