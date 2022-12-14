@@ -16,7 +16,7 @@ public class ReaderRowMapper implements RowMapper<Reader> {
     @Override
     public Reader mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Reader reader = new Reader();
-        reader.setId(resultSet.getLong("reader.id"));
+        reader.setId(resultSet.getLong("user.id"));
         reader.setLogin(resultSet.getString("login"));
         reader.setAccount(accountRowMapper.mapRow(resultSet, rowNum));
         reader.setLock(resultSet.getBoolean("lock"));

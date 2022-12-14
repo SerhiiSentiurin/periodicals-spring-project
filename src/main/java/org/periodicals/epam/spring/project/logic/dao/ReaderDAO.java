@@ -3,10 +3,11 @@ package org.periodicals.epam.spring.project.logic.dao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.periodicals.epam.spring.project.infra.web.exception.ApplicationException;
-import org.periodicals.epam.spring.project.logic.dao.resultSetExtractor.ReaderResultSetExtractor;
+import org.periodicals.epam.spring.project.logic.dao.rowMapper.ReaderRowMapper;
 import org.periodicals.epam.spring.project.logic.entity.Reader;
 import org.periodicals.epam.spring.project.logic.entity.dto.ReaderCreateDTO;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -22,11 +23,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReaderDAO {
     private final JdbcTemplate jdbcTemplate;
-    private final ReaderResultSetExtractor resultSetExtractor;
+    private final ReaderRowMapper readerRowMapper;
 
     public Optional<Reader> getReaderById(Long id) {
         String getReaderById = "SELECT user.id, user.login, reader.account_id, reader.lock, account.amount FROM user JOIN reader ON user.id = reader.id JOIN account ON reader.account_id = account.id WHERE user.id = ?";
-        return jdbcTemplate.query(getReaderById, ps -> ps.setLong(1, id),resultSetExtractor);
+        return Optional.ofNullable(jdbcTemplate.queryForObject(getReaderById,readerRowMapper, id));
     }
 
     @Transactional

@@ -1,7 +1,7 @@
 package org.periodicals.epam.spring.project.logic.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.periodicals.epam.spring.project.logic.dao.resultSetExtractor.UserResultSetExtractor;
+import org.periodicals.epam.spring.project.logic.dao.rowMapper.UserRowMapper;
 import org.periodicals.epam.spring.project.logic.entity.User;
 import org.periodicals.epam.spring.project.logic.entity.dto.UserDto;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,12 +13,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserDAO {
     private final JdbcTemplate jdbcTemplate;
-    private final UserResultSetExtractor userResultSetExtractor;
+    private final UserRowMapper userRowMapper;
 
 
     public Optional<User> getUserByLogin(UserDto userDto) {
-        String getUserByLogin = "SELECT * FROM user WHERE login=?";
-        return jdbcTemplate.query(getUserByLogin, ps -> ps.setString(1, userDto.getLogin()), userResultSetExtractor);
+        String getUserByLogin = "SELECT * FROM user WHERE login = ?";
+        return Optional.ofNullable(jdbcTemplate.queryForObject(getUserByLogin,userRowMapper,userDto.getLogin()));
 
     }
 }

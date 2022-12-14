@@ -45,94 +45,63 @@ public class PeriodicalDAO {
 
     public List<Periodical> getAllPeriodicals(int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical ORDER BY id";
-        return jdbcTemplate.query(sql, ps -> ps.setInt(1, index), periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index);
     }
 
     public List<Periodical> findByTopic(String topic, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ?";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic);
     }
 
     public List<Periodical> findByName(String name, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE name LIKE ?";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, "%" + name + "%");
     }
 
     public List<Periodical> findWithSelectedNameAndTopic(String topic, String name, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? AND name LIKE ?";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-            ps.setString(3, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic, "%" + name + "%");
     }
 
     // sorting in natural ordering
     public List<Periodical> sortByCostAllPeriodicals(int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical ORDER BY cost";
-        return jdbcTemplate.query(sql, ps -> ps.setInt(1, index), periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index);
     }
 
     public List<Periodical> sortByCostWithSelectedTopic(String topic, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? ORDER BY cost";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic);
     }
 
     public List<Periodical> sortByCostWithSelectedName(String name, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE name LIKE ? ORDER BY cost";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, "%" + name + "%");
     }
 
     public List<Periodical> sortByCostWithSelectedTopicAndName(String name, String topic, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? AND name LIKE ? ORDER BY cost";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-            ps.setString(3, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic, "%" + name + "%");
     }
 
     public List<Periodical> sortByNameAllPeriodicals(int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical ORDER BY name";
-        return jdbcTemplate.query(sql, ps -> ps.setInt(1, index), periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index);
     }
 
     public List<Periodical> sortByNameWithSelectedTopic(String topic, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? ORDER BY name";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic);
     }
 
     public List<Periodical> sortByNameWithSelectedName(String name, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE name LIKE ? ORDER BY name";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, "%" + name + "%");
     }
 
     public List<Periodical> sortByNameWithSelectedTopicAndName(String topic, String name, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? AND name LIKE ? ORDER BY name";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-            ps.setString(3, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic, "%" + name + "%");
     }
 
     // reversed sorting
@@ -143,79 +112,49 @@ public class PeriodicalDAO {
 
     public List<Periodical> reversedSortByCostWithSelectedTopic(String topic, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? ORDER BY cost DESC";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic);
     }
 
     public List<Periodical> reversedSortByCostWithSelectedName(String name, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE name LIKE ? ORDER BY cost DESC";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, "%" + name + "%");
     }
 
     public List<Periodical> reversedSortByCostWithSelectedTopicAndName(String name, String topic, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? AND name LIKE ? ORDER BY cost DESC";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-            ps.setString(3, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic, "%" + name + "%");
     }
 
     public List<Periodical> reversedSortByNameAllPeriodicals(int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical ORDER BY name DESC";
-        return jdbcTemplate.query(sql, ps -> ps.setInt(1, index), periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index);
     }
 
     public List<Periodical> reversedSortByNameWithSelectedTopic(String topic, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? ORDER BY name DESC";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic);
     }
 
     public List<Periodical> reversedSortByNameWithSelectedName(String name, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE name LIKE ? ORDER BY name DESC";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, "%" + name + "%");
     }
 
     public List<Periodical> reversedSortByNameWithSelectedTopicAndName(String topic, String name, int index) {
         String sql = "SELECT * FROM (select * from periodical order by id limit ?, 5) periodical WHERE topic = ? AND name LIKE ? ORDER BY name DESC";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setInt(1, index);
-            ps.setString(2, topic);
-            ps.setString(3, "%" + name + "%");
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, index, topic, "%" + name + "%");
     }
 
     public List<Periodical> getPeriodicalsByReaderId(Long readerId) {
         String sql = "SELECT * FROM periodical JOIN periodicals ON periodical.id = periodicals.periodical_id WHERE reader_id =? ORDER BY periodical.id";
-        return jdbcTemplate.query(sql, ps -> {
-            ps.setLong(1, readerId);
-        }, periodicalRowMapper);
+        return jdbcTemplate.query(sql, periodicalRowMapper, readerId);
     }
 
     public Map<Periodical, Prepayment> getPeriodicalsByTopicByReaderId(String topic, Long readerId) {
         String getPeriodicalByTopicByReaderId = "SELECT * FROM periodical JOIN prepayment ON periodical.id = prepayment.periodical_id WHERE reader_id =? AND topic =? ORDER BY periodical.id";
         Map<Periodical, Prepayment> info = new HashMap<>();
-
-        List<Periodical> periodicals = jdbcTemplate.query(getPeriodicalByTopicByReaderId, ps -> {
-            ps.setLong(1, readerId);
-            ps.setString(2, topic);
-        }, periodicalRowMapper);
-
-        List<Prepayment> prepayments = jdbcTemplate.query(getPeriodicalByTopicByReaderId, ps -> {
-            ps.setLong(1, readerId);
-            ps.setString(2, topic);
-        }, prepaymentRowMapper);
+        List<Periodical> periodicals = jdbcTemplate.query(getPeriodicalByTopicByReaderId, periodicalRowMapper, readerId, topic);
+        List<Prepayment> prepayments = jdbcTemplate.query(getPeriodicalByTopicByReaderId, prepaymentRowMapper, readerId, topic);
         for (Periodical periodical : periodicals) {
             for (Prepayment prepayment : prepayments) {
                 info.put(periodical, prepayment);
@@ -226,21 +165,15 @@ public class PeriodicalDAO {
 
     public List<Prepayment> getPrepaymentsByReaderId(Long readerId) {
         String selectPeriodicalsByReaderId = "SELECT prepayment.id, start_date, due_date, periodical_id, reader_id FROM periodical JOIN prepayment ON periodical.id = prepayment.periodical_id WHERE reader_id =? ORDER BY periodical_id";
-        return jdbcTemplate.query(selectPeriodicalsByReaderId, ps -> ps.setLong(1, readerId), prepaymentRowMapper);
+        return jdbcTemplate.query(selectPeriodicalsByReaderId, prepaymentRowMapper, readerId);
     }
 
     public Map<Periodical, Prepayment> findPeriodicalsByNameByReaderId(String name, Long readerId) {
         String findPeriodicalsByNameByReaderId = "SELECT * FROM periodical JOIN prepayment ON periodical.id = prepayment.periodical_id WHERE reader_id =? AND name LIKE ? ORDER BY periodical.id";
         Map<Periodical, Prepayment> info = new HashMap<>();
-        List<Periodical> periodicals = jdbcTemplate.query(findPeriodicalsByNameByReaderId, ps -> {
-            ps.setLong(1, readerId);
-            ps.setString(2, "%" + name + "%");
-        }, periodicalRowMapper);
+        List<Periodical> periodicals = jdbcTemplate.query(findPeriodicalsByNameByReaderId, periodicalRowMapper, readerId, "%" + name + "%");
 
-        List<Prepayment> prepayments = jdbcTemplate.query(findPeriodicalsByNameByReaderId, ps -> {
-            ps.setLong(1, readerId);
-            ps.setString(2, "%" + name + "%");
-        }, prepaymentRowMapper);
+        List<Prepayment> prepayments = jdbcTemplate.query(findPeriodicalsByNameByReaderId, prepaymentRowMapper, readerId, "%" + name + "%");
         for (Periodical periodical : periodicals) {
             for (Prepayment prepayment : prepayments) {
                 info.put(periodical, prepayment);
@@ -275,7 +208,7 @@ public class PeriodicalDAO {
 
     public List<Periodical> findPeriodicalsForSubscribingByName(List<Long> listPeriodicalId, String name) {
         String sqlToGetPeriodicalsForSubscribing = buildSqlToFindPeriodicalsForSubscribingByName(listPeriodicalId);
-        return jdbcTemplate.query(sqlToGetPeriodicalsForSubscribing, ps -> ps.setString(1, "%" + name + "%"), periodicalRowMapper);
+        return jdbcTemplate.query(sqlToGetPeriodicalsForSubscribing, periodicalRowMapper, "%" + name + "%");
     }
 
     private String buildSqlToFindPeriodicalsForSubscribingByName(List<Long> listPeriodicalId) {
@@ -300,7 +233,7 @@ public class PeriodicalDAO {
     public List<Long> getPeriodicalIdByReaderId(Long readerId) {
         String getPeriodicalIdByReaderId = "SELECT * FROM periodicals JOIN periodical ON periodicals.periodical_id = periodical.id WHERE reader_id = ? order by periodical_id";
         List<Long> listOfPeriodicalId = new ArrayList<>();
-        List<Periodical> periodicals = jdbcTemplate.query(getPeriodicalIdByReaderId, ps -> ps.setLong(1, readerId), periodicalRowMapper);
+        List<Periodical> periodicals = jdbcTemplate.query(getPeriodicalIdByReaderId, periodicalRowMapper, readerId);
         for (Periodical periodical : periodicals) {
             listOfPeriodicalId.add(periodical.getId());
         }

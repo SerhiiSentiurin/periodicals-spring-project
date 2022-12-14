@@ -1,7 +1,6 @@
 package org.periodicals.epam.spring.project.logic.dao;
 
 import lombok.AllArgsConstructor;
-import org.periodicals.epam.spring.project.logic.dao.resultSetExtractor.PeriodicalResultSetExtractor;
 import org.periodicals.epam.spring.project.logic.dao.rowMapper.PeriodicalRowMapper;
 import org.periodicals.epam.spring.project.logic.dao.rowMapper.ReaderRowMapper;
 import org.periodicals.epam.spring.project.logic.entity.Periodical;
@@ -21,7 +20,6 @@ public class AdminDAO {
     private final JdbcTemplate jdbcTemplate;
     private final PeriodicalRowMapper periodicalRowMapper;
     private final ReaderRowMapper readerRowMapper;
-    private final PeriodicalResultSetExtractor periodicalResultSetExtractor;
 
     public List<Periodical> getAllPeriodicals() {
         String sql = "SELECT * FROM periodical ORDER BY id";
@@ -30,55 +28,32 @@ public class AdminDAO {
 
     public void createNewPeriodical(PeriodicalDTO dto) {
         String addNewPeriodical = "INSERT INTO periodical (name, topic, cost, description) VALUES (?,?,?,?)";
-        jdbcTemplate.update(addNewPeriodical,
-                ps -> {
-                    ps.setString(1, dto.getName());
-                    ps.setString(2, dto.getTopic());
-                    ps.setDouble(3, dto.getCost());
-                    ps.setString(4, dto.getDescription());
-                });
+        jdbcTemplate.update(addNewPeriodical, dto.getName(), dto.getTopic(), dto.getCost(), dto.getDescription());
     }
 
     public void deletePeriodicalByPeriodicalId(Long periodicalId) {
         String deletePeriodical = "DELETE FROM periodical WHERE periodical.id = ?";
-        jdbcTemplate.update(deletePeriodical,
-                ps -> {
-                    ps.setLong(1, periodicalId);
-                });
+        jdbcTemplate.update(deletePeriodical, periodicalId);
     }
 
     public void deletePeriodicalForReaders(Long periodicalId) {
         String delPeriodical = "UPDATE periodical SET isDeleted = true WHERE id = ?";
-        jdbcTemplate.update(delPeriodical,
-                ps -> {
-                    ps.setLong(1, periodicalId);
-                });
+        jdbcTemplate.update(delPeriodical, periodicalId);
     }
 
     public void restorePeriodicalForReaders(Long periodicalId) {
         String restorePeriodical = "UPDATE periodical SET isDeleted = false WHERE id = ?";
-        jdbcTemplate.update(restorePeriodical,
-                ps -> {
-                    ps.setLong(1, periodicalId);
-                });
+        jdbcTemplate.update(restorePeriodical, periodicalId);
     }
 
     public Periodical getPeriodicalById(Long periodicalId) {
         String getPeriodical = "SELECT * FROM periodical WHERE id = ?";
-        return jdbcTemplate.query(getPeriodical,
-                ps -> ps.setLong(1, periodicalId), periodicalResultSetExtractor);
+        return jdbcTemplate.queryForObject(getPeriodical, periodicalRowMapper, periodicalId);
     }
 
     public void editPeriodicalById(PeriodicalDTO dto) {
         String editPeriodical = "UPDATE periodical SET name =?, topic =?, cost =?, description =? WHERE id =?";
-        jdbcTemplate.update(editPeriodical,
-                ps -> {
-                    ps.setString(1, dto.getName());
-                    ps.setString(2, dto.getTopic());
-                    ps.setDouble(3, dto.getCost());
-                    ps.setString(4, dto.getDescription());
-                    ps.setLong(5, dto.getPeriodicalId());
-                });
+        jdbcTemplate.update(editPeriodical, dto.getName(), dto.getTopic(), dto.getCost(), dto.getDescription(), dto.getPeriodicalId());
     }
 
     //TODO need to improve
@@ -88,7 +63,7 @@ public class AdminDAO {
         List<Periodical> periodicals = jdbcTemplate.query(getAll, periodicalRowMapper);
         List<Reader> readers = jdbcTemplate.query(getAll, readerRowMapper);
         int i = 0;
-        for (Reader reader:readers){
+        for (Reader reader : readers) {
 
             map.put(reader, periodicals.get(i));
             if (map.containsKey(reader)) {
@@ -102,16 +77,11 @@ public class AdminDAO {
 
     public void lockReader(Long readerId) {
         String lockReader = "UPDATE reader SET reader.lock = true WHERE id = ?";
-        jdbcTemplate.update(lockReader,
-                ps -> {
-                    ps.setLong(1, readerId);
-                });
+        jdbcTemplate.update(lockReader, readerId);
     }
 
     public void unlockReader(Long readerId) {
         String lockReader = "UPDATE reader SET reader.lock = false WHERE id = ?";
-        jdbcTemplate.update(lockReader, ps -> {
-            ps.setLong(1, readerId);
-        });
+        jdbcTemplate.update(lockReader, readerId);
     }
 }
